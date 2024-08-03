@@ -1,0 +1,46 @@
+name: Discovery API
+
+on:
+  pull_request:
+    paths:
+      - 'apps/api/**'
+  push:
+    branches:
+      - main
+      - dev
+    paths:
+      - 'apps/api/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Cache Poetry packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: ${{ runner.os }}-poetry-${{ hashFiles('apps/api/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
+
+      - name: Install Poetry
+        run: pip3 install poetry
+
+      - name: Install dependencies
+        working-directory: apps/api
+        run: poetry install
+      - name: Run lint
+        working-directory: apps/api
+        run: poetry run ruff check discovery/ tests/
+      - name: Run tests
+        working-directory: apps/api
+        run: poetry run pytest --disable-warnings tests/

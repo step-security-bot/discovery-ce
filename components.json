@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "default",
+  "rsc": false,
+  "tailwind": {
+    "config": "libs/libs/cn/tailwind.config.js",
+    "css": "libs/libs/cn/global.css",
+    "baseColor": "neutral",
+    "cssVariables": true
+  },
+  "aliases": {
+    "components": "@discovery/ui",
+    "utils": "@discovery/cn"
+  }
+}

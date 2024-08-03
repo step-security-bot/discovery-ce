@@ -1,0 +1,91 @@
+{
+  "folders": [
+    {
+      "name": "📦 Workspace",
+      "path": "."
+    },
+    {
+      "name": "🐍 API",
+      "path": "apps/api"
+    },
+    {
+      "name": "🔭 Discovery (Frontend)",
+      "path": "apps/discovery"
+    },
+    {
+      "name": "🧪 Discovery E2E",
+      "path": "apps/discovery-e2e"
+    },
+    {
+      "name": "🧱 Shared",
+      "path": "libs"
+    }
+  ],
+  "settings": {
+    "explorer.excludeGitIgnore": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "always"
+    },
+    "vsicons.associations.folderDefault.root_folder": {
+      "disabled": true
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "eslint.workingDirectories": ["./apps/discovery", "./packages/*", "libs/*"],
+    "javascript.suggest.paths": false,
+    "typescript.suggest.paths": false,
+    "indentRainbow.indicatorStyle": "light",
+    "indentRainbow.lightIndicatorStyleLineWidth": 1,
+    "indentRainbow.colors": [
+      "rgba(255,255,64,0.3)",
+      "rgba(127,255,127,0.3)",
+      "rgba(255,127,255,0.3)",
+      "rgba(79,236,236,0.3)"
+    ],
+    "errorLens.codeLensEnabled": true,
+    "errorLens.gutterIconsEnabled": true,
+    "[dockercompose]": {
+      "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+    },
+    "[javascript]": {
+      "editor.formatOnSave": true
+    },
+    "[prisma]": {
+      "editor.defaultFormatter": "Prisma.prisma"
+    },
+    "[python]": {
+      "editor.codeActionsOnSave": {
+        "source.organizeImports": "always"
+      },
+      "editor.defaultFormatter": "charliermarsh.ruff",
+      "editor.formatOnSave": true
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      /* Base Extensions */
+      "VisualStudioExptTeam.vscodeintellicode",
+      "vscode-icons-team.vscode-icons",
+      "ms-azuretools.vscode-docker",
+      "Codeium.codeium",
+      "usernamehw.errorlens",
+      "mikestead.dotenv",
+      "quicktype.quicktype",
+      "Prisma.prisma",
+      "sleistner.vscode-fileutils",
+      "oderwat.indent-rainbow",
+      /* Python */
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "charliermarsh.ruff",
+      "ms-python.isort",
+      "ms-python.black-formatter",
+      /** JS & TS & TSX */
+      "christian-kohler.path-intellisense",
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "blanu.vscode-styled-jsx",
+      "ms-vscode.vscode-typescript-next"
+    ]
+  }
+}

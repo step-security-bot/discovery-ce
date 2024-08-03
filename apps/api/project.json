@@ -1,0 +1,85 @@
+{
+  "name": "api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/api/discovery",
+  "tags": [
+    "core",
+    "api"
+  ],
+  "targets": {
+    "lock": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "poetry lock --no-update",
+        "cwd": "apps/api"
+      }
+    },
+    "add": {
+      "executor": "@nxlv/python:add",
+      "options": {}
+    },
+    "update": {
+      "executor": "@nxlv/python:update",
+      "options": {}
+    },
+    "remove": {
+      "executor": "@nxlv/python:remove",
+      "options": {}
+    },
+    "install": {
+      "executor": "@nxlv/python:install",
+      "options": {
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
+      }
+    },
+    "lint": {
+      "executor": "@nxlv/python:ruff-check",
+      "outputs": [],
+      "options": {
+        "lintFilePatterns": [
+          "discovery",
+          "tests"
+        ]
+      }
+    },
+    "format": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "poetry run ruff format discovery tests",
+        "cwd": "apps/api"
+      }
+    },
+    "test": {
+      "executor": "@nxlv/python:run-commands",
+      "outputs": [
+        "{workspaceRoot}/reports/apps/api/unittests",
+        "{workspaceRoot}/coverage/apps/api"
+      ],
+      "options": {
+        "command": "poetry run pytest tests/",
+        "cwd": "apps/api"
+      }
+    },
+    "dev": {
+      "executor": "@nxlv/python:run-commands",
+      "dependsOn": [
+        "lint"
+      ],
+      "options": {
+        "command": "docker compose -f 'docker/docker-compose.api.yml' up -d --build",
+        "cwd": "./"
+      }
+    },
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "preset": "conventionalcommits"
+      }
+    }
+  }
+}

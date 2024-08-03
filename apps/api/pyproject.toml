@@ -1,0 +1,77 @@
+[tool.coverage.run]
+branch = true
+source = [ "discovery" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = "--cov --cov-report html:'../../coverage/apps/api/html' --cov-report xml:'../../coverage/apps/api/coverage.xml' --html='../../reports/apps/api/unittests/html/index.html' --junitxml='../../reports/apps/api/unittests/junit.xml'"
+
+[tool.poetry]
+name = "discovery"
+version = "1.0.0"
+description = "Discovery Internal Api"
+authors = ["Mohamed Ali <m.ali@0bytes.io>"]
+license = 'Proprietary'
+readme = 'README.md'
+
+  [[tool.poetry.packages]]
+  include = "discovery"
+
+  [tool.poetry.dependencies]
+  python = "^3.12"
+  fastapi = "^0.111.1"
+  tortoise-orm = "^0.21.5"
+  celery = {extras = ["redis"], version = "^5.4.0"}
+  docker = "^7.1.0"
+  fastapi-pagination = "^0.12.26"
+  pusher = "^3.3.2"
+  boto3 = "^1.34.151"
+
+  [tool.poetry.group.dev.dependencies]
+  autopep8 = "2.0.2"
+  ruff = "0.1.5"
+  pytest = "7.3.1"
+  pytest-sugar = "0.9.7"
+  pytest-cov = "4.1.0"
+  pytest-html = "3.2.0"
+  pytest-asyncio = "^0.23.8"
+  boto3-stubs = {extras = ["essential"], version = "^1.34.151"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+exclude = [
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  "dist",
+]
+
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+select = [
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
+]
+ignore = []
+
+fixable = ["ALL"]
+unfixable = []

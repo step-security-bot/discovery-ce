@@ -1,0 +1,25 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@discovery/cn": ["libs/cn/src/index.ts"],
+      "@discovery/cn/*": ["libs/libs/cn/src/*"],
+      "@discovery/ui": ["libs/ui/src/index.ts"],
+      "@discovery/ui/*": ["libs/libs/ui/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

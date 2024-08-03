@@ -54,9 +54,6 @@
       "editor.defaultFormatter": "Prisma.prisma"
     },
     "[python]": {
-      "editor.codeActionsOnSave": {
-        "source.organizeImports": "always"
-      },
       "editor.defaultFormatter": "charliermarsh.ruff",
       "editor.formatOnSave": true
     }
@@ -78,8 +75,6 @@
       "ms-python.python",
       "ms-python.vscode-pylance",
       "charliermarsh.ruff",
-      "ms-python.isort",
-      "ms-python.black-formatter",
       /** JS & TS & TSX */
       "christian-kohler.path-intellisense",
       "esbenp.prettier-vscode",

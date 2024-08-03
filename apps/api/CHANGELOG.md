@@ -1,3 +1,7 @@
+## 0.2.0 (2024-08-03)
+
+This was a version bump only for api to align it with other projects, there were no code changes.
+
 ## 0.1.0 (2024-08-03)
 
 

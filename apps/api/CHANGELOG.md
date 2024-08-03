@@ -1,3 +1,10 @@
+## 0.4.0 (2024-08-03)
+
+
+### 🚀 Features
+
+- **discovery:** chain httpx task after subfinder ([efb8f0f](https://github.com/0bytes-security/discovery-ce/commit/efb8f0f))
+
 ## 0.3.0 (2024-08-03)
 
 

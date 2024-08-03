@@ -1,0 +1,103 @@
+name: discovery
+services:
+  docker:
+    build:
+      dockerfile: api/dind-rootless.Dockerfile
+    container_name: 'docker'
+    privileged: true
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+    networks:
+      core:
+        ipv4_address: 172.10.10.9
+    volumes:
+      - docker:/var/lib/docker
+      - docker-certs:/certs/client
+      - secure:/secure:rw
+    ports:
+      - 2376
+  redis:
+    image: redis:latest
+    container_name: 'redis'
+    networks:
+      core:
+        ipv4_address: 172.10.10.10
+    ports:
+      - 6379
+  internal-api:
+    container_name: 'internal-api'
+    build:
+      context: ../
+      dockerfile: docker/api/Dockerfile
+    environment:
+      - RUN_MODE=api
+    entrypoint: 'uvicorn discovery.app:app --host 0.0.0.0 --port 8000'
+    env_file: api/.env.dev
+    networks:
+      core:
+        ipv4_address: 172.10.10.11
+    volumes:
+      - secure:/secure:rw
+      - docker-certs:/certs/client:ro
+      - /tmp:/db:rw
+    depends_on:
+      - redis
+      - docker
+      - minio
+    ports:
+      - 8000:8000
+    healthcheck:
+      test: curl --fail http://localhost:8000/health || exit 1
+      interval: 40s
+      timeout: 30s
+      retries: 3
+      start_period: 60s
+  celery:
+    container_name: 'celery'
+    build:
+      context: ../
+      dockerfile: docker/api/Dockerfile
+    privileged: true
+    environment:
+      - RUN_MODE=celery
+    env_file: api/.env.dev
+    entrypoint: celery -A discovery.core.celery worker --pool=solo --loglevel=info
+    networks:
+      core:
+        ipv4_address: 172.10.10.12
+    volumes:
+      - secure:/secure:rw
+      - docker-certs:/certs/client:ro
+      - /tmp:/db:rw
+    depends_on:
+      - redis
+      - docker
+      - internal-api
+      - minio
+  minio:
+    image: 'minio/minio:latest'
+    container_name: 'minio'
+    environment:
+      - MINIO_ROOT_USER=minio
+      - MINIO_ROOT_PASSWORD=password
+      - MINIO_DATA_DIR=/mnt/data
+      - MINIO_DEFAULT_BUCKETS=discovery
+    command: server --console-address ":9001" /mnt/data
+    networks:
+      core:
+        ipv4_address: 172.10.10.13
+    volumes:
+      - minio-data:/mnt/data
+    ports:
+      - 9001:9001
+networks:
+  core:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.10.10.0/24
+volumes:
+  secure:
+  docker:
+  docker-certs:
+  minio-data:

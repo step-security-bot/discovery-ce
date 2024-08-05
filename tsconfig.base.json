@@ -16,8 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@discovery/shared": ["libs/shared/src/index.ts"],
-      "@discovery/shared/utils": ["libs/shared/src/libs/utils.ts"],
-      "@discovery/shared/*": ["libs/shared/src/*"]
+      "@discovery/shared/*": ["libs/shared/src/*"],
+      "@discovery/shared/utils": ["libs/shared/src/libs/utils.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

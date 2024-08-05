@@ -15,6 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@discovery/prisma": ["prisma/src/index.ts"],
+      "@discovery/prisma/*": ["prisma/src/*"],
       "@discovery/shared": ["libs/shared/src/index.ts"],
       "@discovery/shared/*": ["libs/shared/src/*"],
       "@discovery/shared/utils": ["libs/shared/src/libs/utils.ts"]

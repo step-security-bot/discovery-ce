@@ -60,11 +60,12 @@
   "nxCloudAccessToken": "Y2QxMTU2NmItOGI2OC00NjI3LWFkNGQtNTVjNGQ5NDUxOTNjfHJlYWQtd3JpdGU=",
   "release": {
     "releaseTagPattern": "release/{projectName}/{version}",
-    "projects": ["api", "shared", "frontend"],
+    "projects": ["api", "shared", "frontend", "prisma"],
     "version": {
       "conventionalCommits": true,
       "generatorOptions": {
-        "preset": "conventionalcommits"
+        "preset": "conventionalcommits",
+        "fallbackCurrentVersionResolver": "disk"
       }
     },
     "changelog": {

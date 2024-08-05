@@ -15,10 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@discovery/cn": ["libs/cn/src/index.ts"],
-      "@discovery/cn/*": ["libs/libs/cn/src/*"],
-      "@discovery/ui": ["libs/ui/src/index.ts"],
-      "@discovery/ui/*": ["libs/libs/ui/src/*"]
+      "@discovery/shared": ["libs/shared/src/index.ts"],
+      "@discovery/shared/utils": ["libs/shared/src/libs/utils.ts"],
+      "@discovery/shared/*": ["libs/shared/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

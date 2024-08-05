@@ -4,8 +4,9 @@
     "baseUrl": ".",
     "paths": {
       "@discovery/shared": ["../../libs/shared/src/index.ts"],
-      "@discovery/shared/utils": ["../../libs/shared/src/libs/utils.ts"],
-      "@discovery/shared/*": ["../../libs/shared/src/*"]
+      "@discovery/shared/utils": ["../../libs/shared/src/lib/utils.ts"],
+      "@discovery/shared/*": ["../../libs/shared/src/*"],
+      "@/*": ["./src/*"]
     },
     "jsx": "preserve",
     "allowJs": true,
@@ -17,6 +18,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
+    "moduleResolution": "Bundler",
     "plugins": [
       {
         "name": "next"

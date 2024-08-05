@@ -14,6 +14,8 @@
   },
   "private": true,
   "dependencies": {
+    "@clerk/elements": "^0.12.1",
+    "@clerk/nextjs": "^5.2.12",
     "@hookform/resolvers": "^3.9.0",
     "@nx-extend/shadcn-ui": "^2.0.4",
     "@radix-ui/react-accordion": "^1.2.0",

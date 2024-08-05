@@ -15,9 +15,7 @@
       "!{projectRoot}/src/test-setup.[jt]s",
       "!{projectRoot}/test-setup.[jt]s"
     ],
-    "sharedGlobals": [
-      "{workspaceRoot}/.github/workflows/ci.yml"
-    ]
+    "sharedGlobals": []
   },
   "plugins": [
     {
@@ -66,18 +64,18 @@
     "releaseTagPattern": "release/{projectName}/{version}",
     "projects": [
       "api",
-      "discovery"
+      "shared",
+      "frontend"
     ],
     "version": {
       "conventionalCommits": true,
       "generatorOptions": {
-        "preset": "conventionalcommits",
-        "fallbackCurrentVersionResolver": "disk"
+        "preset": "conventionalcommits"
       }
     },
     "changelog": {
       "workspaceChangelog": {
-         "file": false,
+        "file": false,
         "createRelease": "github",
         "renderOptions": {
           "authors": true,

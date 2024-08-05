@@ -2,10 +2,7 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "defaultProject": "api",
   "namedInputs": {
-    "default": [
-      "{projectRoot}/**/*",
-      "sharedGlobals"
-    ],
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
       "default",
       "!{projectRoot}/.eslintrc.json",
@@ -63,11 +60,7 @@
   "nxCloudAccessToken": "Y2QxMTU2NmItOGI2OC00NjI3LWFkNGQtNTVjNGQ5NDUxOTNjfHJlYWQtd3JpdGU=",
   "release": {
     "releaseTagPattern": "release/{projectName}/{version}",
-    "projects": [
-      "api",
-      "shared",
-      "frontend"
-    ],
+    "projects": ["api", "shared", "frontend"],
     "version": {
       "conventionalCommits": true,
       "generatorOptions": {

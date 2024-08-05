@@ -13,12 +13,8 @@
       "path": "apps/discovery"
     },
     {
-      "name": "🧪 Discovery E2E",
-      "path": "apps/discovery-e2e"
-    },
-    {
       "name": "🧱 Shared",
-      "path": "libs"
+      "path": "libs/shared"
     }
   ],
   "settings": {

@@ -1,0 +1,28 @@
+{
+  "name": "prisma",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "prisma/src",
+  "projectType": "library",
+  "tags": ["database"],
+  "targets": {
+    "migrate-save": {
+      "builder": "@nx/workspace:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "npx prisma migrate save --experimental --schema ./schema/discovery.prisma",
+        "cwd": "./"
+      }
+    },
+    "migrate-up": {
+      "outputs": [],
+      "options": {
+        "command": "npx prisma migrate up --experimental --schema ./schema/discovery.prisma"
+      }
+    },
+    "gen-client": {
+      "builder": "@nx/workspace:run-commands",
+      "outputs": [],
+      "command": "npx prisma generate --schema ./prisma/schema/discovery.prisma"
+    }
+  }
+}

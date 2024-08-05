@@ -1,0 +1,62 @@
+generator client {
+    provider = "prisma-client-js"
+    output   = "../src/generated/client"
+}
+
+generator zod {
+    provider                  = "zod-prisma-types"
+    output                    = "../src/generated/zod"
+    createRelationValuesTypes = true
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("PRISMA_DATABASE_URL")
+}
+
+model Scan {
+    id          String     @id @default(uuid())
+    target      String
+    status      ScanStatus @default(QUEUED)
+    userId      String     @map("user_id")
+    runId       String?    @map("run_id")
+    hosts       Hosts[]
+    startedAt   DateTime?  @map("started_at")
+    failedAt    DateTime?  @map("failed_at")
+    completedAt DateTime?  @map("completed_at")
+    createdAt   DateTime   @default(now()) @map("created_at")
+    updatedAt   DateTime   @updatedAt @map("updated_at")
+
+    @@map("scans")
+}
+
+model Hosts {
+    id           String   @id @default(uuid())
+    name         String
+    title        String
+    url          String
+    technologies String[]
+    statusCode   String   @map("status_code")
+    capturedAt   DateTime @map("captured_at")
+    webServer    String   @map("web_server")
+    screenshot   String
+    ipAddress    String[] @map("ip_address")
+    hostName     String   @map("host_name")
+    rawHeaders   String   @map("raw_headers")
+    metadata     Json
+    scanId       String   @map("scan_id")
+    scan         Scan     @relation(fields: [scanId], references: [id])
+    createdAt    DateTime @default(now()) @map("created_at")
+    updatedAt    DateTime @updatedAt @map("updated_at")
+
+    @@map("hosts")
+}
+
+enum ScanStatus {
+    QUEUED
+    RUNNING
+    COMPLETED
+    FAILED
+
+    @@map("scan_status")
+}

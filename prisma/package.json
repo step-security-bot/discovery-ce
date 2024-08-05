@@ -1,0 +1,7 @@
+{
+  "name": "@discovery/prisma",
+  "version": "1.0.0",
+  "prisma": {
+    "schema": "./schema/discovery.prisma"
+  }
+}

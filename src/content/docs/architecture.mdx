@@ -1,0 +1,207 @@
+---
+title: Architecture
+discription: Discovery's modular, distributed architecture
+editUrl: https://github.com/0bytes-security/discovery-ce/edit/docs/src/content/docs/architecture.mdx
+---
+
+import Badge from "~/components/shields-badge.astro";
+
+Discovery's architecture is engineered for flexibility, scalability, and ease of integration, empowering security professionals to streamline and automate their assessments. This document provides a comprehensive explanation of its core components, their interactions, and the underlying principles that drive its efficiency and extensibility.
+
+## High-Level View
+
+Discovery orchestrates the execution of security assessment tools within isolated Docker containers. Its distributed system facilitates parallel processing and offers real-time insights into assessment progress.
+
+The **frontend**, built with Next.js 14, provides a user-friendly interface for managing assessments, configuring tools, and viewing results. It leverages the Shadcn UI component library and Tailwind CSS for styling and communicates with the backend through tRPC. Authentication is managed by Clerk.
+
+The **backend**, powered by FastAPI, manages API requests, task execution via Celery, and interacts with the PostgreSQL database using Tortoise ORM. Containerization using Docker ensures isolated and reproducible tool execution, while optional services like Amazon S3 and Pusher enhance storage and real-time capabilities.
+
+import { Image } from "astro:assets";
+
+import Architecture from "~/digrams/architecture.svg";
+import ArchitectureDark from "~/digrams/architecture-dark.svg";
+
+<Image
+  class="image-light"
+  alt="Discovery architecture digram"
+  src={Architecture}
+  width="1727px"
+  height="1000px"
+/>
+
+<Image
+  class="image-dark"
+  alt="Discovery architecture digram"
+  src={ArchitectureDark}
+  width="1727px"
+  height="1000px"
+/>
+
+
+<hr />
+
+
+## Backend
+
+
+<span class="flex flex-row space-x-2 my-5 mx-5">
+  <Badge text="Python" icon="python" version="13.4" />
+  <Badge text="FastAPI" icon="fastapi" version="lastest" />
+  <Badge text="Celery" icon="celery" version="5.4.0" />
+  <Badge text="Pydantic" icon="pydantic" version="latest" />
+</span>
+
+* **FastAPI:**  A high-performance, asynchronous web framework built with Python.  
+  * **Key Roles:** 
+    - Defining API endpoints using decorators.
+    - Routing API requests to the correct handlers.
+    - Validating data using Pydantic models. 
+    - Serializing responses in JSON format.
+    - Handling WebSocket connections for real-time updates.
+    - Dependency injection for managing components and services. 
+* **Celery:**  A distributed task queue responsible for asynchronous execution of security assessment tasks.  
+  * **Key Roles:**
+    - Receiving tasks from the FastAPI backend. 
+    - Queuing and prioritizing tasks.
+    - Distributing tasks to Celery workers.
+    - Monitoring task progress and results.
+    - Providing retry mechanisms for failed tasks.
+* **Task Registry:** This system manages the integration of security assessment tools (referred to as "tasks") with the platform.
+  * **Key Roles:**
+    - **Dynamic Task Discovery:** Scans the [`apps/api/discovery/tasks`](https://github.com/0bytes-security/discovery-ce/tree/main/apps/api/discovery/tasks) directory on startup to discover and import task modules.
+    - **Task Validation:** Validates each task module to ensure that it defines a `Task` class which inherits from the [`discovery.runs.run.Run`](https://github.com/0bytes-security/discovery-ce/blob/13e48df650d2ef91c948bfee1939e928832f4e7a/apps/api/discovery/runs/run.py#L61) base class and implements the required methods. 
+    - **Celery Registration:** Registers valid task modules with Celery, making them available for execution. 
+* **Tortoise ORM:** A Python ORM that enables interactions with the PostgreSQL database.
+  * **Key Roles:**
+    - **Model Definition:**  Developers define database models using Python classes that represent database tables.
+    - **Database Operations:** The ORM provides functions for performing create, read, update, and delete operations on database entities.
+    - **Relationship Management:** Tortoise ORM can define relationships (one-to-many, many-to-many) between models to maintain data consistency and integrity. 
+
+
+### Containerization & Storage
+
+<span class="flex flex-row space-x-2 my-5 mx-5">
+  <Badge text="Docker" icon="docker" version="rootless" />
+</span>
+
+
+* **Docker:** Provides a containerization environment for running security assessment tools in isolation.
+  * **Key Roles:**
+    - **Container Isolation:** Tools execute within separate containers, preventing dependency conflicts.
+    - **Reproducible Environments:** Ensures that assessments run consistently across different systems.
+    - **Security:** Docker's security features, like image signing and vulnerability scanning, help enhance the overall security of the platform.
+* **Container Volumes:** Allow data to be shared between the host operating system and the Docker containers.
+  * **Key Roles:**
+    - **Input Data:** Input data required for an assessment can be mounted as volumes and accessed by the tools within the container. 
+    - **Output Data:** Security tools can store their output data and logs in volumes. 
+    - **Amazon S3 Integration:**  Output volumes can be configured to be backed by S3 buckets, enabling persistent and secure storage of assessment data. 
+
+### Real-time Communication
+
+<span class="flex flex-row space-x-2 my-5 mx-5">
+  <Badge text="WebSockets" icon="socketdotio" />
+  <Badge text="Pusher" icon="pusher" />
+</span>
+
+* **WebSockets:** A communication protocol that enables full-duplex, real-time data exchange between the Next.js frontend and the FastAPI backend.  
+  * **Key Roles:**
+    - Establishing persistent connections: Clients (browsers running the frontend) establish persistent WebSocket connections with the backend.
+    - Real-time Updates: The backend server uses these connections to send real-time updates (assessment progress, findings, errors) to connected clients, keeping users informed.  
+* **Pusher:** A hosted real-time messaging service that can be integrated into Discovery.
+  * **Key Roles:** 
+    - Event Broadcasting: Discovery can use Pusher to send events about significant changes or updates in the system.
+    - Frontend Subscriptions:  The frontend can subscribe to specific Pusher channels to receive real-time notifications, enhancing user awareness.
+    
+## Frontend
+
+<span class="flex flex-row space-x-2 my-5 mx-5">
+  <Badge text="Nextjs" icon="nextjs" version="14" />
+  <Badge text="Shadcn UI" icon="shadcnui" version="❤️" colors={{
+    version:"red"
+  }} />
+  <Badge text="Tailwind CSS" icon="tailwindcss" version="❤️" colors={{
+    version:"red"
+  }} />
+  <Badge text="Clerk" icon="clerk" version="❤️" colors={{
+    version:"red"
+  }} />
+  <Badge text="tRPC" icon="trpc" version="latest" />
+</span>
+
+* **Next.js 14:** This React-based framework empowers the frontend with capabilities like server-side rendering, automatic static optimization, and a streamlined development process.
+  * **Key Roles:** 
+    - Rendering user interfaces
+    - Handling routing and navigation
+    - Managing application state 
+    - Interacting with the backend via tRPC for data fetching, mutations, and real-time updates. 
+* **Shadcn UI:** This carefully crafted React component library provides reusable, customizable, and accessible UI elements, speeding up frontend development and ensuring a polished user experience. 
+* **Tailwind CSS:** This utility-first CSS framework simplifies styling with pre-defined CSS utility classes. Developers can rapidly assemble custom designs without writing verbose custom CSS.
+* **Clerk:** Handles authentication, managing user registration, login, session management, and user profile information, freeing developers from building custom authentication logic.
+* **tRPC:** This end-to-end typesafe communication protocol enables secure and efficient communication between the Next.js frontend and the FastAPI backend. tRPC enhances developer experience by ensuring type safety, reducing runtime errors, and providing autocompletion for API requests. 
+
+
+
+## Data Flow Example
+
+Let's walk through a scenario to illustrate the interaction between different components:
+
+1. **User Starts an Assessment:** A user, using the Discovery web interface, configures an assessment. They specify the target domain or IP address, choose the desired security tool from a list of available tasks, and set any tool-specific parameters. 
+2. **Frontend tRPC Request:** The frontend, using its tRPC client, sends a request to the backend API's `/tasks` endpoint. The request data includes the task name and parameters.
+3. **API Task Validation and Celery Integration:** The FastAPI backend validates the input data against Pydantic models to ensure data integrity. After validation, it uses the Task Registry to locate the requested task module. If the task is valid and registered with Celery, the backend creates a Celery task.
+4. **Celery Task Queuing and Execution:** The new task is placed in the Celery task queue. A Celery worker running in the background will eventually pick up the task from the queue and execute it. 
+5. **Containerization and Execution:** Within the Celery worker:
+    - The task module is loaded.
+    - The [`Run`](https://github.com/0bytes-security/discovery-ce/blob/13e48df650d2ef91c948bfee1939e928832f4e7a/apps/api/discovery/runs/run.py#L61) class associated with the task manages Docker interactions:
+        - The tool's Docker image is pulled from a repository (Docker Hub or a private registry). 
+        - A Docker container is created with the correct configuration, including mounting the necessary input and output volumes. 
+        - The security tool's command is executed inside the container.
+6. **Real-Time Updates:** As the tool runs,  The backend captures runs, and using the established WebSocket connection, sends real-time updates to the frontend. This keeps the user informed about the assessment's progress, any new findings, or potential errors encountered. 
+7. **Result Handling and Storage:** Once the tool completes its execution, the container stops. The `on_finished` method within the task module handles post-execution logic.
+    - It parses the tool output.
+    - Important data is stored in the database using Tortoise ORM. 
+    - Larger output files, such as reports or raw data dumps, are uploaded to S3 for persistent storage (if S3 integration is enabled). 
+8. **Frontend Results Display:** After the backend processes the results, the frontend is notified, usually via a final WebSocket message. The frontend uses its tRPC client to fetch the complete and updated assessment results from the API. The interface updates accordingly to display these results to the user in a well-organized format.
+
+## Advantages of Our Architecture
+
+- **Modularity:** Components are clearly separated, promoting code maintainability, reusability, and the ability to upgrade or replace components independently. 
+- **Scalability:** The distributed nature of the architecture, using Celery for background tasks and Docker for isolated tool execution, allows horizontal scaling to handle increasing workloads by adding more workers and container hosts. 
+- **Extensibility:** The dynamic Task Registry system and the use of a base [`Run`](https://github.com/0bytes-security/discovery-ce/blob/13e48df650d2ef91c948bfee1939e928832f4e7a/apps/api/discovery/runs/run.py#L61) class make integrating new tools into the platform relatively straightforward.  
+- **Real-Time Visibility:**  The integration of WebSockets keeps users constantly informed about assessment progress, fostering a more interactive and efficient workflow.
+- **Secure and Consistent Execution:** Docker containers provide a secure and reproducible environment, ensuring that tools always run with the required dependencies and configuration.  
+- **Type Safety and Developer Experience:** The use of tRPC provides type safety between the frontend and backend, leading to fewer runtime errors and a better developer experience with autocompletion and improved code maintainability.
+
+## Security Considerations
+
+Security is a critical consideration in Discovery's architecture:
+
+- **Authentication & Authorization:**  Clerk secures the platform with robust authentication. Developers should enforce authorization rules on sensitive endpoints, ensuring users only access their own assessments and data.
+- **Input Validation:**  Validate all user inputs on both the frontend (using form validation and JavaScript) and the backend (using Pydantic) to prevent common attacks like SQL injection and cross-site scripting.
+- **Secure API Design:** Implement API security best practices: 
+    - Rate limiting to prevent abuse
+    - Input sanitization
+    - Proper error handling
+- **Container Hardening:**  
+    - Use minimal base images for Docker containers. 
+    - Implement the principle of least privilege within containers, restricting tool access only to necessary resources. 
+    - Regularly scan container images for vulnerabilities. 
+- **Secure Database Configuration:** 
+    - Follow PostgreSQL security guidelines, including least privilege access for database users.
+    - Encrypt sensitive data when storing it in the database, if necessary.  
+
+## Additional Resources 
+
+For further exploration, consult the official documentation for the technologies used in Discovery:
+
+- **FastAPI:**  [https://fastapi.tiangolo.com/](https://fastapi.tiangolo.com/)
+- **Celery:** [https://docs.celeryproject.org/](https://docs.celeryproject.org/)
+- **Docker:** [https://docs.docker.com/](https://docs.docker.com/)
+- **Next.js:** [https://nextjs.org/](https://nextjs.org/)
+- **Shadcn UI:** [https://ui.shadcn.com/](https://ui.shadcn.com/)
+- **Tailwind CSS:** [https://tailwindcss.com/](https://tailwindcss.com/)
+- **Clerk:** [https://clerk.com/](https://clerk.com/)
+- **tRPC:** [https://trpc.io/](https://trpc.io/)
+- **Tortoise ORM:** [https://tortoise-orm.readthedocs.io/](https://tortoise-orm.readthedocs.io/)
+- **Nx:**  [https://nx.dev/](https://nx.dev/)
+
+

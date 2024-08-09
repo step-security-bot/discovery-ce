@@ -4,8 +4,7 @@ import starlightLinksValidator from "starlight-links-validator";
 import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
-  site: "https://0bytes-security.github.io",
-  base: "discovery-ce",
+  site: "https://discovery.0bytes.io",
   integrations: [
     starlight({
       title: "Discovery",

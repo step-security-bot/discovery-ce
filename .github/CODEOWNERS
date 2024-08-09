@@ -1,0 +1,15 @@
+# Each line is a file pattern followed by one or more owners.
+
+# These owners will be the default owners for everything in
+# the repo. Unless a later match takes precedence,
+# @0bytes-security/oss team members will be requested for
+# review when someone opens a pull request.
+* @0bytes-security/oss
+
+
+# Owners of all documentation
+*.txt       @0bytes-security/oss
+*.md        @0bytes-security/oss
+COPYRIGHT   @0bytes-security/oss
+LICENSE     @0bytes-security/oss
+NOTICE      @0bytes-security/oss
